@@ -1,0 +1,404 @@
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+.price__percentage__main__div {
+  /* background-color: red; */
+  align-self: flex-end;
+}
+
+
+.name__main__div{
+  /* background-color: red; */
+  align-self: flex-start;
+}
+
+.social__icons__main__class{
+  /* background-color: red; */
+  width: auto;
+  align-self: flex-start;
+}
+.Create__Butter__Wallet{
+  background-color: #3D362E;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+
+.dashboard {
+  min-height: 100vh;
+  background-color: #343735;
+  display: flex;
+  flex-direction: column;
+}
+
+.header-card {
+  background-color: #343735;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.dashboard-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin: 0;
+  color: #F8F8AE;
+}
+
+.last-update {
+  font-size: 0.875rem;
+  color: #F8F8AE;
+  margin: 0;
+}
+
+.charts-container .chart-row {
+  margin-right: -8px;
+  margin-left: -8px;
+}
+
+.chart-card {
+  background-color: white;
+  border-radius: 0.5rem;
+  padding: 0.75rem;
+  height: 240px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.2s ease-in-out;
+  display: flex;
+  flex-direction: column;
+}
+
+.chart-card:hover {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.chart-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 0.25rem;
+}
+
+.chart-title {
+  min-width: 0;
+  flex: 1;
+}
+
+.token-symbol {
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.contract-address {
+  font-size: 0.75rem;
+  color: #6c757d;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.price-change {
+  font-size: 0.75rem;
+  font-weight: 500;
+  padding: 0.125rem 0.375rem;
+  border-radius: 0.25rem;
+  margin-left: 0.25rem;
+}
+
+.price-change.positive {
+  background-color: #d1fae5;
+  color: #065f46;
+}
+
+.price-change.negative {
+  background-color: #fee2e2;
+  color: #991b1b;
+}
+
+/* .chart-body {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  justify-content: center;
+} */
+
+.processing-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1050;
+}
+
+.processing-content {
+  background-color: white;
+  border-radius: 0.5rem;
+  padding: 1.5rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.error-alert {
+  background-color: #fee2e2;
+  border: 1px solid #fecaca;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  color: #991b1b;
+}
+
+.error-alert h4 {
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.retry-button {
+  background-color: #dc2626;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 0.375rem;
+  margin-top: 0.5rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.retry-button:hover {
+  background-color: #b91c1c;
+}
+
+.no-data {
+  text-align: center;
+  color: #6c757d;
+  padding: 2rem;
+  background-color: white;
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+@media (max-width: 768px) {
+  .charts-container .col {
+      padding: 4px;
+  }
+  
+  .chart-card {
+      height: 200px;
+  }
+}
+
+.close-button {
+  background: none;
+  border: none;
+  color: #666;
+  font-size: 1.2rem;
+  padding: 4px 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  margin-left: 8px;
+}
+
+.close-button:hover {
+  color: #dc3545;
+  background-color: rgba(220, 53, 69, 0.1);
+}
+
+.close-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.chart-header {
+  padding: 12px 16px;
+  /* border-bottom: 1px solid #eee; */
+}
+
+.chart-title {
+  margin-bottom: 8px;
+}
+
+.price-change {
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+.spinner-border-sm {
+  width: 1rem;
+  height: 1rem;
+  border-width: 0.15em;
+}
+
+.copy-button {
+  background: none;
+  border: none;
+  color: #666;
+  padding: 4px 8px;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.copy-button:hover {
+  color: #007bff;
+}
+
+.contract-address {
+  margin: 0;
+  color: #666;
+  font-size: 0.85rem;
+}
+
+
+/* Add or update these styles in your App.css */
+
+/* Chart Card Base Styles */
+.chart-card {
+  margin-bottom: 1rem;
+  /* border: 1px solid #dee2e6; */
+  border-radius: 0.5rem;
+  overflow: hidden;
+  background: black;
+  height: auto;
+}
+
+.chart-header {
+  padding: 0.75rem;
+  background-color: #000000;
+  border-bottom: 1px solid #dee2e6;
+  color: white;
+}
+
+.chart-body {
+  min-height: 200px; /* Default height for desktop */
+  width: 100%;
+  position: relative;
+  padding: 1rem;
+  background: black;
+}
+
+/* Mobile Responsive Styles */
+@media (max-width: 768px) {
+  .chart-card {
+      margin-bottom: 1.5rem;
+      width: 100%;
+  }
+
+  .chart-body {
+      height: 250px; /* Tablet height */
+      min-height: 250px;
+      padding: 0.5rem;
+  }
+
+  .chart-row {
+      margin: 0 -0.5rem;
+  }
+
+  .col-md-4 {
+      padding: 0 0.5rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .container-fluid {
+      padding: 0.5rem;
+  }
+
+  .chart-card {
+      margin-bottom: 1rem;
+  }
+
+  .chart-body {
+      height: 200px; /* Mobile height */
+      min-height: 200px;
+      width: 100%;
+      overflow: hidden;
+  }
+
+  /* Adjust column padding */
+  .col-12 {
+      padding-left: 0.5rem;
+      padding-right: 0.5rem;
+  }
+
+  /* Ensure charts don't get cut off */
+  .charts-container {
+      margin-bottom: 1rem;
+  }
+
+  /* Adjust tab container */
+  .tab-content {
+      margin-top: 1rem;
+  }
+}
+
+/* LightweightChart container styles */
+.chart-body > div {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* Ensure chart canvas is properly sized */
+.chart-body canvas {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+#dropdown-basic::after {
+  content: none; /* Hides the arrow content */
+  display: none; /* Completely removes the pseudo-element */
+}
+
+/* Footer layout styles */
+.dashboard .container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.dashboard .tabs-section {
+  flex: 1;
+}
+
+

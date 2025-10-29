@@ -1,0 +1,12 @@
+/* Add to your CSS file */
+.settings-open .settings-modal {
+    z-index: 60;  
+}
+
+.settings-open .modal-backdrop {
+    z-index: -50;  
+}
+
+body.settings-open {
+    overflow: hidden;
+}

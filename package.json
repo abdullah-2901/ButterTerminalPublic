@@ -1,0 +1,80 @@
+{
+  "name": "butterterminal-client",
+  "version": "0.1.0",
+  "private": true,
+  "proxy": "https://api.example.com",
+  "dependencies": {
+    "@analytics/google-analytics": "^1.1.0",
+    "@fortawesome/fontawesome-svg-core": "^6.6.0",
+    "@fortawesome/free-solid-svg-icons": "^6.6.0",
+    "@fortawesome/react-fontawesome": "^0.2.2",
+    "@jup-ag/api": "^6.0.30",
+    "@reduxjs/toolkit": "^2.5.0",
+    "@solana/wallet-adapter-base": "^0.9.23",
+    "@solana/wallet-adapter-react": "^0.15.35",
+    "@solana/wallet-adapter-react-ui": "^0.9.35",
+    "@solana/wallet-adapter-wallets": "^0.19.32",
+    "@solana/web3.js": "^1.87.0",
+    "@testing-library/jest-dom": "^5.17.0",
+    "@testing-library/react": "^13.4.0",
+    "@testing-library/user-event": "^13.5.0",
+    "ajv": "^6.9.1",
+    "ajv-keywords": "^3.4.1",
+    "axios": "^1.7.7",
+    "bootstrap": "^5.3.3",
+    "bs58": "^5.0.0",
+    "html2canvas": "^1.4.1",
+    "lightweight-charts": "^4.2.1",
+    "lucide-react": "^0.454.0",
+    "plotly.js": "^2.35.2",
+    "react": "^18.3.1",
+    "react-bootstrap": "^2.10.5",
+    "react-dom": "^18.3.1",
+    "react-ga4": "^2.1.0",
+    "react-hot-toast": "^2.4.1",
+    "react-plotly.js": "^2.6.0",
+    "react-redux": "^9.2.0",
+    "react-router-dom": "^7.1.0",
+    "react-toastify": "^11.0.2",
+    "rpc-websockets": "^7.5.1",
+    "web-vitals": "^2.1.4"
+  },
+  "scripts": {
+    "start": "set PORT=3000 && react-scripts start",
+    "build": "set GENERATE_SOURCEMAP=false && react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.4.20",
+    "browserify-zlib": "^0.2.0",
+    "buffer": "^6.0.3",
+    "crypto-browserify": "^3.12.1",
+    "https-browserify": "^1.0.0",
+    "postcss": "^8.4.48",
+    "process": "^0.11.10",
+    "react-scripts": "^5.0.1",
+    "stream-browserify": "^3.0.0",
+    "stream-http": "^3.2.0",
+    "tailwindcss": "^3.4.14",
+    "url": "^0.11.4"
+  }
+}

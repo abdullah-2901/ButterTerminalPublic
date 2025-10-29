@@ -1,0 +1,112 @@
+.chart-card {
+    touch-action: pan-y pinch-zoom;
+    user-select: none;
+    -webkit-user-select: none;
+    position: relative;
+    will-change: transform;
+    color: white;
+}
+
+.chart-card:active {
+    cursor: grabbing;
+}
+
+.token-name {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.price-change {
+    font-weight: bold;
+    transition: color 0.2s;
+}
+
+.price-change.positive {
+    color: #00ff88;
+}
+
+.price-change.negative {
+    color: #ff3b3b;
+}
+
+.token-links {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.token-links img {
+    opacity: 0.6;
+    transition: opacity 0.2s;
+    cursor: pointer;
+}
+
+.token-links img:hover {
+    opacity: 1;
+}
+
+.chart-container {
+    background: #000000;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.swipe-indicator {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 6rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.swipe-indicator.buy {
+    right: 0;
+    background: #00ff88;
+    color: black;
+    border-top-left-radius: 16px;
+    border-bottom-left-radius: 16px;
+}
+
+.swipe-indicator.sell {
+    left: 0;
+    background: #ff3b3b;
+    color: white;
+    border-top-right-radius: 16px;
+    border-bottom-right-radius: 16px;
+}
+
+.copy-button {
+    transition: all 0.15s ease;
+}
+
+.copy-button:hover {
+    transform: scale(1.1);
+}
+
+.token-links a {
+    transition: all 0.15s ease;
+}
+
+.token-links a:hover {
+    transform: scale(1.1);
+}
+.token__name__div{
+    padding-left: 2%;
+}
+.price-change {
+    font-size: .9rem;
+    font-weight: 500;
+}
+.price-change.positive {
+    background-color: #d1fae5;
+    color: #065f46;
+}
+.price-change {
+    font-size: .9rem;
+    font-weight: 500;
+}
