@@ -72,10 +72,9 @@ const TokenHoldings = ({ isOpen, onClose, settings, copyHandler, setCopiedStates
     };
 
     // Function to fetch metadata for tokens from API
-    const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'https://api.example.com';
     const fetchTokenMetadata = async (tokenAddresses) => {
         try {
-            const response = await axios.get(`${API_BASE_URL}/api/token-metadata`, {
+            const response = await axios.get('https://trd.buttertrade.xyz/api/token-metadata', {
                 params: {
                     tokens: tokenAddresses.join(',')
                 }
@@ -162,7 +161,7 @@ const TokenHoldings = ({ isOpen, onClose, settings, copyHandler, setCopiedStates
                 isJitoAmount: isJitoIncluded ? parseFloat(jitoAmount || 0) : 0
             };
 
-            const response = await axios.post(`${API_BASE_URL}/api/trade`, requestData);
+            const response = await axios.post('https://trd.buttertrade.xyz/api/trade', requestData);
 
             if (response.status === 200) {
                 await fetchTokenAccounts();

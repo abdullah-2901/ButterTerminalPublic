@@ -59,12 +59,11 @@ const usePriceWebSocket = (initialChannel, onPriceUpdate) => {
     const tokenTimeframesRef = useRef(new Map());
     
     // Define WebSocket URLs to try - moved outside function to persist between reconnects
-    const WS_BASE_URL = process.env.REACT_APP_WS_BASE_URL || 'wss://api.example.com';
     const wsUrlsRef = useRef([
-        `${WS_BASE_URL}/OHLCV/ws`,
-        `${WS_BASE_URL}/ws`,
-        // `${WS_BASE_URL}/v1/ws`,
-        // `${WS_BASE_URL}/v2/ws`
+        'wss://api.buttertrade.xyz/OHLCV/ws',
+        'wss://api.buttertrade.xyz/ws',
+        // 'wss://api.buttertrade.xyz/v1/ws',
+        // 'wss://api.buttertrade.xyz/v2/ws'
     ]);
 
     const registerTokenTimeframe = useCallback((contractAddress, timeframe, channelName) => {

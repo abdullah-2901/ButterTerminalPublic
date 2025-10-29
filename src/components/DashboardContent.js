@@ -41,9 +41,8 @@ import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
 import { useWallet } from '@solana/wallet-adapter-react';
 
 // API endpoints configuration
-const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'https://api.example.com';
-const UPDATE_STATUS_URL = `${API_BASE_URL}/api/Data`;
-const HOLDERS_DATA_API = `${API_BASE_URL}/api/Data/GetHoldersLiveDataWithChannelName`;
+const UPDATE_STATUS_URL = 'https://api.buttertrade.xyz/api/Data';
+const HOLDERS_DATA_API = 'https://api.buttertrade.xyz/api/Data/GetHoldersLiveDataWithChannelName';
 const SETTINGS_STORAGE_KEY = 'butter_trade_settings';
 
 // Tab configuration
@@ -654,7 +653,7 @@ const processData = (rawData, currentTab) => {
             }
     
             // For development, use a proxy path to avoid CORS issues
-            // In package.json, add "proxy": "https://api.example.com" to handle CORS
+            // In package.json, add "proxy": "https://api.buttertrade.xyz" to handle CORS
             const url = `/OHLCV/api/tokens/active?hours=96`;
             
             let response;

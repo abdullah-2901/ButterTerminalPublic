@@ -30,12 +30,11 @@ const loadStateFromLocalStorage = () => {
 };
 
 // Let's create new async thunks for butter wallet operations
-const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'https://api.example.com';
 export const getButterWallet = createAsyncThunk(
     'UserNewWalletDetails/getButterWallet',
     async (address) => {
         try {
-            const response = await axios.get(`${API_BASE_URL}/api/walletsinfo`, {
+            const response = await axios.get('https://trd.buttertrade.xyz/api/walletsinfo', {
                 params: { publicKey: address.toString() }
             });
 
@@ -55,7 +54,7 @@ export const createButterWallet = createAsyncThunk(
     'UserNewWalletDetails/createButterWallet',
     async (address) => {
         try {
-            const response = await axios.post(`${API_BASE_URL}/api/newbutterwallet`, {
+            const response = await axios.post('https://trd.buttertrade.xyz/api/newbutterwallet', {
                 publicKey: address
             });
 
@@ -75,7 +74,7 @@ export const initializeWallet = createAsyncThunk(
     async (_, { getState }) => {
         const state = loadStateFromLocalStorage();
         if (state && state.wallet) {
-            const response = await axios.post(`${API_BASE_URL}/api/initial-state`, 
+            const response = await axios.post('https://trd.buttertrade.xyz/api/initial-state', 
                 { publicKey: state.wallet }
             );
             return {

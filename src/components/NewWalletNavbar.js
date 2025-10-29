@@ -30,10 +30,9 @@ const NewWalletNavbar = () => {
     const [isLoading, setIsLoading] = useState(false);
 
     // Function to fetch butter wallet details
-    const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'https://api.example.com';
     const fetchButterWallet = useCallback(async (address) => {
         try {
-            const response = await axios.get(`${API_BASE_URL}/api/walletsinfo`, {
+            const response = await axios.get('https://trd.buttertrade.xyz/api/walletsinfo', {
                 params: { publicKey: address.toString() }
             });
 
@@ -64,7 +63,7 @@ const NewWalletNavbar = () => {
             const hasButterWallet = await fetchButterWallet(address);
 
             // Then get account details
-            const resp = await axios.post(`${API_BASE_URL}/api/account-detail`, {
+            const resp = await axios.post('https://trd.buttertrade.xyz/api/account-detail', {
                 pubKeyString: address
             });
 

@@ -623,12 +623,11 @@ useEffect(() => {
         // Update submission status
         showToast.loading('Submitting transaction...', toastId);
         let response;
-        const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'https://api.example.com';
         if (currentType=='buy'){
-        response = await axios.post(`${API_BASE_URL}/buy`, requestData);
+        response = await axios.post('https://hack.buttertrade.xyz/buy', requestData);
         // response = await axios.post('http://localhost:8003/buy', requestData);
         }else{
-          response = await axios.post(`${API_BASE_URL}/sell`, requestData);
+          response = await axios.post('https://hack.buttertrade.xyz/sell', requestData);
         }
         console.log("response");
         console.log(response);

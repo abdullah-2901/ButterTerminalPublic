@@ -14,8 +14,7 @@ const DynamicMaps = () => {
             setError(null);
 
             const response = await axios.get('https://localhost:7025/api/Data/GetLiveData'); // Replace with your actual API URL
-            // const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'https://api.example.com';
-            // const response = await axios.get(`${API_BASE_URL}/api/Data/GetLiveData`); // Replace with your actual API URL
+            // const response = await axios.get('http://208.167.248.128:8086/api/Data/GetLiveData'); // Replace with your actual API URL
             // console.log('API Response:', response.data);
             setContractData(response.data);
         } catch (error) {

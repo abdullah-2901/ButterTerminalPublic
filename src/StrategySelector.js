@@ -76,8 +76,7 @@ const CustomMenu = forwardRef(
 const StrategySelector = ({ className = '', contractAddress, channelName }) => {
     const [selectedStrategy, setSelectedStrategy] = useState('select');
     const [isLoading, setIsLoading] = useState(false);
-    const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'https://api.example.com';
-    const API_ENDPOINT = `${API_BASE_URL}/api/Data/InsertStrategyWithContract`;
+    const API_ENDPOINT = 'http://208.167.248.128:8086/api/Data/InsertStrategyWithContract';
     // const API_ENDPOINT = 'https://localhost:7025/api/Data/InsertStrategyWithContract';
 
     const strategies = [

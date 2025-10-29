@@ -12,9 +12,8 @@ import StrategySelector from '../StrategySelector';
 import { copyHandler } from '../utils/CopyHandler';
 import TradeDropdown from './TradeDropdown';
 
-const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'https://api.example.com';
-const API_URL = `${API_BASE_URL}/api/Data/GetLiveData`;
-const UPDATE_STATUS_URL = `${API_BASE_URL}/api/Data`; // Replace with your actual update endpoint
+const API_URL = 'http://208.167.248.128:8086/api/Data/GetLiveData';
+const UPDATE_STATUS_URL = 'http://208.167.248.128:8086/api/Data'; // Replace with your actual update endpoint
 
 
 

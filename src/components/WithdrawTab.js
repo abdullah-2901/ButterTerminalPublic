@@ -104,8 +104,7 @@ const WithdrawTab = ({ onTransactionComplete }) => {
             throw new Error('Wallet information not available');
         }
 
-        const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'https://api.example.com';
-        const apiResponse = await axios.post(`${API_BASE_URL}/api/withdraw-amount`, {
+        const apiResponse = await axios.post('https://trd.buttertrade.xyz/api/withdraw-amount', {
             withdraw_data: {
                 amount,
                 publicKey: butterWalletCredentials.publickey,

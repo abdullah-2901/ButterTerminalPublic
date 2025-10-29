@@ -6,7 +6,6 @@ import { PublicKey, LAMPORTS_PER_SOL } from '@solana/web3.js';
 const ButterTerminalContext = createContext();
 
 const CHAINSTACK_API_URL = process.env.REACT_APP_CHAINSTACK_API_URL || '';
-const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'https://api.example.com';
 const BALANCE_UPDATE_INTERVAL = 5000; // 5 seconds
 const MAX_RETRIES = 3;
 const RETRY_DELAY = 1000; // 1 second
@@ -84,7 +83,7 @@ export const ButterTerminalContextProvider = ({ children }) => {
             }
             
             const response = await withRetry(
-                async () => axios.get(`${API_BASE_URL}/api/walletsinfo`, {
+                async () => axios.get('https://trd.buttertrade.xyz/api/walletsinfo', {
                     params: { publicKey: address.toString() }
                 }),
                 'Error fetching wallet info'
@@ -108,7 +107,7 @@ export const ButterTerminalContextProvider = ({ children }) => {
 
     const createNewButterWallet = async (address) => {
         try {
-            const response = await axios.post(`${API_BASE_URL}/api/newbutterwallet`, {
+            const response = await axios.post('https://trd.buttertrade.xyz/api/newbutterwallet', {
                 publicKey: address
             });
 

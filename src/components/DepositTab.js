@@ -112,8 +112,7 @@ const DepositTab = ({ onTransactionComplete }) => {
 
             await connection.confirmTransaction(signature, 'confirmed');
 
-            const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'https://api.example.com';
-            await axios.post(`${API_BASE_URL}/api/deposit-amount`, {
+            await axios.post('https://trd.buttertrade.xyz/api/deposit-amount', {
                 deposit_data: {
                     amount: depositAmount,
                     publicKey: butterWalletCredentials.publickey,

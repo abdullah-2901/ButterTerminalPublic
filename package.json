@@ -2,7 +2,7 @@
   "name": "butterterminal-client",
   "version": "0.1.0",
   "private": true,
-  "proxy": "https://api.example.com",
+  "proxy": "https://api.buttertrade.xyz",
   "dependencies": {
     "@analytics/google-analytics": "^1.1.0",
     "@fortawesome/fontawesome-svg-core": "^6.6.0",

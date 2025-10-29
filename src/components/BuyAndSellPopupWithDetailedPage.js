@@ -600,8 +600,7 @@ useEffect(() => {
         // Update submission status
         showToast.loading('Submitting transaction...', toastId);
   
-        const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'https://api.example.com';
-        const response = await axios.post(`${API_BASE_URL}/trade`, requestData);
+        const response = await axios.post('https://trd.buttertrade.xyz/trade', requestData);
   
         if (response.status === 200 && response.data.Signature) {
           // Clear the submission toast as we're moving to monitoring

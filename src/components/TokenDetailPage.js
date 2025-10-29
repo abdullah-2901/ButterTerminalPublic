@@ -8,10 +8,9 @@ import { faArrowLeft, faGear } from '@fortawesome/free-solid-svg-icons';
 import TradeSettings from './TradeSetings';
 
 // API utility function
-const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'https://api.example.com';
 const fetchCandleData = async (contractAddress, timeframe) => {
   try {
-    const response = await fetch(`${API_BASE_URL}/OHLCV/api/candles/${contractAddress}/${timeframe}`);
+    const response = await fetch(`https://api.buttertrade.xyz/OHLCV/api/candles/${contractAddress}/${timeframe}`);
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
@@ -598,4 +597,4 @@ const TokenDetailPage = ({
 
 export default TokenDetailPage;
 
-// https://api.example.com/OHLCV/api/candles/contractaddress/timeframe
+// https://api.buttertrade.xyz/OHLCV/api/candles/contractaddress/timeframe
