@@ -1,0 +1,4 @@
+sudo unzip /home/butter/ftp/files/butterterminal.zip -d /var/www/butterterminal
+
+
+sudo systemctl reload nginx

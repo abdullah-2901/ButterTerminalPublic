@@ -10,6 +10,7 @@ const initialState = {
     // New butter wallet properties
     butterWalletCredentials: null,
     butterWalletSol: 0,
+    telegramId: null,
     // Status management
     status: 'idle',
     error: null
@@ -81,6 +82,7 @@ export const initializeWallet = createAsyncThunk(
                 user_wallet_detail: response.data.data.user_wallet_detail || null,
                 user_new_wallet_balance: response.data.data.user_new_wallet_balance || 0,
                 user_subscription_data: response.data.data.user_subscription_data || null,
+                telegramId: response.data?.data?.telegram_id ?? response.data?.telegram_id ?? null,
             };
         }
         return initialState;
@@ -121,6 +123,7 @@ const UserNewWalletDetails = createSlice({
                 state.user_wallet_detail = action.payload.user_wallet_detail;
                 state.user_new_wallet_balance = action.payload.user_new_wallet_balance;
                 state.user_subscription_data = action.payload.user_subscription_data;
+                state.telegramId = action.payload.telegramId ?? null;
             })
             .addCase(initializeWallet.rejected, (state, action) => {
                 state.status = 'failed';

@@ -5,7 +5,7 @@ import { PublicKey, LAMPORTS_PER_SOL } from '@solana/web3.js';
 
 const ButterTerminalContext = createContext();
 
-const CHAINSTACK_API_URL = process.env.REACT_APP_CHAINSTACK_API_URL || '';
+const CHAINSTACK_API_URL = 'https://nd-161-454-889.p2pify.com';
 const BALANCE_UPDATE_INTERVAL = 5000; // 5 seconds
 const MAX_RETRIES = 3;
 const RETRY_DELAY = 1000; // 1 second
@@ -79,7 +79,7 @@ export const ButterTerminalContextProvider = ({ children }) => {
         try {
             if (!address) {
                 console.error('No address provided to getWallet');
-                return false;
+                return { success: false, telegramId: null };
             }
             
             const response = await withRetry(
@@ -92,16 +92,36 @@ export const ButterTerminalContextProvider = ({ children }) => {
             if (response.data.success && Array.isArray(response.data.data) && response.data.data.length > 0) {
                 const walletData = response.data.data[0];
                 setButterWalletCredentials(walletData);
+                // console.log('walletData', walletData);
+                // console.log('butterWalletCredentials', butterWalletCredentials);
                 await updateAllBalances(address, walletData.publickey);
-                return true;
+                // Also fetch telegram_id from initial-state API and return it
+                try {
+                    const initResp = await axios.post('https://trd.buttertrade.xyz/api/initial-state', {
+                        publicKey: address.toString()
+                    }, { headers: { 'Content-Type': 'application/json' } });
+                    const telegramId = initResp?.data?.data?.telegram_id ?? initResp?.data?.telegram_id ?? null;
+                    return { success: true, telegramId };
+                } catch (e) {
+                    return { success: true, telegramId: null };
+                }
             }
 
             setButterWalletCredentials(null);
-            return false;
+            // Even if wallet isn't present, still try to fetch telegram_id
+            try {
+                const initResp = await axios.post('https://trd.buttertrade.xyz/api/initial-state', {
+                    publicKey: address.toString()
+                }, { headers: { 'Content-Type': 'application/json' } });
+                const telegramId = initResp?.data?.data?.telegram_id ?? initResp?.data?.telegram_id ?? null;
+                return { success: false, telegramId };
+            } catch (e) {
+                return { success: false, telegramId: null };
+            }
         } catch (error) {
             console.error('Error fetching wallet:', error);
             setButterWalletCredentials(null);
-            return false;
+            return { success: false, telegramId: null };
         }
     };
 

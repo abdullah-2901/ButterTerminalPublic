@@ -16,7 +16,7 @@ import max_icon from '../assets/icons/maxIcon.svg';
 const JUPITER_API_BASE = 'https://quote-api.jup.ag/v6';
 const SOL_MINT = 'So11111111111111111111111111111111111111112';
 // const HELIUS_WS_URL = 'wss://atlas-mainnet.helius-rpc.com/?api-key=';
-const HELIUS_WS_URL = 'wss://mainnet.helius-rpc.com/?api-key=';
+const HELIUS_WS_URL = 'wss://mainnet.helius-rpc.com';
 const MAX_RETRIES = 3;
 const CONNECTION_TIMEOUT = 10000;
 const RECONNECT_DELAY = 1000;

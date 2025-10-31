@@ -16,7 +16,7 @@ import max_icon from '../assets/icons/maxIcon.svg';
 const JUPITER_API_BASE = 'https://lite-api.jup.ag/swap/v1';
 const SOL_MINT = 'So11111111111111111111111111111111111111112';
 // const HELIUS_WS_URL = 'wss://atlas-mainnet.helius-rpc.com/?api-key=';
-const HELIUS_WS_URL = process.env.REACT_APP_HELIUS_WS_URL || 'wss://mainnet.helius-rpc.com/?api-key=';
+const HELIUS_WS_URL = 'wss://mainnet.helius-rpc.com';
 const MAX_RETRIES = 3;
 const CONNECTION_TIMEOUT = 10000;
 const RECONNECT_DELAY = 1000;
@@ -517,7 +517,7 @@ useEffect(() => {
 
       const inputMint = currentType === 'buy' ? SOL_MINT : contractAddress;
       const outputMint = currentType === 'buy' ? contractAddress : SOL_MINT;
-      const inputDecimals = currentType === 'buy' ? 9 : decimals;
+      const inputDecimals = currentType === 'buy' ? 9 : 6;
       const inputAmountInBaseUnits = Math.floor(amount * Math.pow(10, inputDecimals));
 
       // Convert slippage percentage to basis points (bps)
@@ -551,7 +551,7 @@ useEffect(() => {
         } else {
           // Selling: output is SOL, divide by additional factor
           const rawAmount = quoteData.outAmount;
-          const divisor = Math.pow(10, 11);
+          const divisor = Math.pow(10, 9);
           outputAmount = Number(rawAmount) / divisor;
         }
         

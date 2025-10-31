@@ -3,6 +3,7 @@
 import React, { useEffect, useState, useCallback, useContext, useRef } from 'react';
 import { BrowserRouter as Router, Routes, Route, useNavigate, Navigate } from 'react-router-dom';
 import axios from 'axios';
+// Telegram auth now handled by buttertrade.online - import removed
 
 
 // Import asset icons
@@ -45,8 +46,8 @@ const UPDATE_STATUS_URL = 'https://api.buttertrade.xyz/api/Data';
 const HOLDERS_DATA_API = 'https://api.buttertrade.xyz/api/Data/GetHoldersLiveDataWithChannelName';
 const SETTINGS_STORAGE_KEY = 'butter_trade_settings';
 
-// Tab configuration
-const TAB_CONFIGURATIONS = [
+// Base tab configuration
+const BASE_TAB_CONFIGURATIONS = [
     {
         name: 'sauce',
         channels: [ 'pumpswap'],
@@ -123,6 +124,8 @@ const DashboardContent = () => {
     const [lastUpdate, setLastUpdate] = useState(null);
     const [isProcessing, setIsProcessing] = useState(false);
     const [settings, setSettings] = useState(loadSettingsFromStorage());
+    // Dynamic tabs from Telegram chat names
+    const [chatTabs, setChatTabs] = useState([]);
 
     // UI state
     const [showBuySellPopup, setShowBuySellPopup] = useState(false);
@@ -132,6 +135,171 @@ const DashboardContent = () => {
     const [isWalletPopupOpen, setIsWalletPopupOpen] = useState(false);
     const [copiedStates, setCopiedStates] = useState({});
     const [updatingStatus, setUpdatingStatus] = useState(null);
+
+    // Telegram state (dashboard button)
+    const [telegramUser, setTelegramUser] = useState(null);
+    const AUTH_APP_DOMAIN = 'https://buttertrade.online';
+    
+    const onConnectTelegram = async () => {
+        try {
+            if (butterWalletCredentials?.telegram_id != null) {
+                return;
+            }
+            // Redirect to auth app on buttertrade.online
+            const returnUrl = encodeURIComponent(`${window.location.origin}${window.location.pathname}`);
+            const authUrl = `${AUTH_APP_DOMAIN}/?returnUrl=${returnUrl}`;
+            window.location.href = authUrl;
+        } catch (e) {
+            console.error('Telegram connect failed:', e);
+        }
+    };
+
+    // Handle Telegram auth callback from buttertrade.online
+    useEffect(() => {
+        const handleTelegramAuthCallback = async () => {
+            // Check if we're coming from the auth app - check for telegramData in URL params
+            const urlParams = new URLSearchParams(window.location.search);
+            const telegramData = urlParams.get('telegramData');
+            const isAuthCallback = urlParams.get('telegramAuth') === 'true' || telegramData !== null;
+
+            if (isAuthCallback && telegramData) {
+                try {
+                    const user = JSON.parse(decodeURIComponent(telegramData));
+                    setTelegramUser(user);
+
+                    // Save telegram_id to backend immediately
+                    const telegramIdToSave = user?.username || String(user?.id || '');
+                    
+                    if (telegramIdToSave) {
+                        // Function to save telegram_id
+                        const saveTelegramId = async (userPublicKey) => {
+                            try {
+                                const body = new URLSearchParams();
+                                body.set('userpublickey', userPublicKey.toString());
+                                body.set('telegram_id', telegramIdToSave);
+                                
+                                await axios.post('https://trd.buttertrade.xyz/api/save-telegram', body);
+                                
+                                // Refresh wallet data to get updated telegram_id
+                                if (publicKey && getWallet) {
+                                    await getWallet(publicKey.toString());
+                                }
+                                
+                                // Clean up URL parameters after successful save
+                                window.history.replaceState({}, document.title, window.location.pathname);
+                                return true;
+                            } catch (err) {
+                                console.error('Failed to save Telegram:', err?.response?.data || err.message);
+                                return false;
+                            }
+                        };
+
+                        // Check if butterWalletCredentials is already available
+                        const userPublicKey = butterWalletCredentials?.userpublickey;
+                        
+                        if (userPublicKey) {
+                            // Credentials are available, save immediately
+                            await saveTelegramId(userPublicKey);
+                        } else {
+                            // Credentials not available yet, wait for them (page reloads and API takes time)
+                            // Store telegramData in sessionStorage so we can save it later
+                            sessionStorage.setItem('pendingTelegramAuth', JSON.stringify({
+                                telegramId: telegramIdToSave,
+                                userData: user
+                            }));
+                            
+                            // Clean up URL parameters but keep waiting for credentials
+                            window.history.replaceState({}, document.title, window.location.pathname);
+                        }
+                    }
+                } catch (err) {
+                    console.error('Failed to process Telegram auth callback:', err);
+                }
+            }
+        };
+
+        handleTelegramAuthCallback();
+    }, [publicKey, butterWalletCredentials, getWallet]);
+
+    // Handle pending Telegram auth when butterWalletCredentials becomes available
+    useEffect(() => {
+        const handlePendingTelegramAuth = async () => {
+            const pendingAuth = sessionStorage.getItem('pendingTelegramAuth');
+            
+            if (pendingAuth && butterWalletCredentials?.userpublickey) {
+                // Clear sessionStorage immediately to prevent multiple saves
+                sessionStorage.removeItem('pendingTelegramAuth');
+                
+                try {
+                    const { telegramId, userData } = JSON.parse(pendingAuth);
+                    const userPublicKey = butterWalletCredentials.userpublickey;
+                    
+                    const body = new URLSearchParams();
+                    body.set('userpublickey', userPublicKey.toString());
+                    body.set('telegram_id', telegramId);
+                    
+                    await axios.post('https://trd.buttertrade.xyz/api/save-telegram', body);
+                    
+                    // Update telegram user state
+                    setTelegramUser(userData);
+                    
+                    // Refresh wallet data to get updated telegram_id
+                    if (publicKey && getWallet) {
+                        await getWallet(publicKey.toString());
+                    }
+                } catch (err) {
+                    console.error('Failed to save pending Telegram auth:', err);
+                    // Restore pending auth if save failed so user can retry
+                    sessionStorage.setItem('pendingTelegramAuth', pendingAuth);
+                }
+            }
+        };
+
+        handlePendingTelegramAuth();
+    }, [butterWalletCredentials, publicKey, getWallet]);
+
+    // Hydrate telegram from backend initial-state when wallet connects
+    useEffect(() => {
+        const fetchTelegram = async () => {
+            try {
+                if (!publicKey) return;
+                const resp = await axios.post('https://trd.buttertrade.xyz/api/initial-state', {
+                    publicKey: publicKey.toString()
+                }, { headers: { 'Content-Type': 'application/json' } });
+                const tgid = resp?.data?.data?.telegram_id ?? resp?.data?.telegram_id ?? null;
+                if (tgid) {
+                    const isNumeric = /^\d+$/.test(String(tgid));
+                    const userObj = isNumeric
+                        ? { id: String(tgid), username: '' }
+                        : { id: '', username: String(String(tgid).replace(/^@/, '')) };
+                    setTelegramUser(userObj);
+                }
+            } catch (err) {
+                // silent
+            }
+        };
+        fetchTelegram();
+    }, [publicKey]);
+
+    // Fetch Telegram chat names and create dynamic tabs
+    useEffect(() => {
+        const fetchChatTabs = async () => {
+            try {
+                const rawTg = butterWalletCredentials?.telegram_id
+                    || (telegramUser?.username ? telegramUser.username : (telegramUser?.id ? String(telegramUser.id) : null));
+                if (!rawTg) return;
+                const cleaned = String(rawTg).replace(/^@/, '');
+                const resp = await axios.get(`https://trd.buttertrade.xyz/api/telegram-chats/${encodeURIComponent(cleaned)}`);
+                const chats = Array.isArray(resp?.data?.data) ? resp.data.data : [];
+                const uniqueChats = [...new Set(chats.filter(Boolean))];
+                const tabs = uniqueChats.map(name => ({ name, channels: [name], combinedChannels: name }));
+                setChatTabs(tabs);
+            } catch (e) {
+                setChatTabs([]);
+            }
+        };
+        fetchChatTabs();
+    }, [butterWalletCredentials?.telegram_id, telegramUser?.username, telegramUser?.id]);
 
     // Token and trade state
     const [contractAddress, setContractAddress] = useState('');
@@ -652,9 +820,12 @@ const processData = (rawData, currentTab) => {
                 setPriceLoading(true);
             }
     
-            // For development, use a proxy path to avoid CORS issues
-            // In package.json, add "proxy": "https://api.buttertrade.xyz" to handle CORS
-            const url = `/OHLCV/api/tokens/active?hours=96`;
+            // Choose endpoint based on selected tab/channel
+            // sauce → active tokens; other tabs → by-chat
+            const url = channel === 'sauce'
+                ? `/OHLCV/api/tokens/active?hours=96`
+                : `https://api.buttertrade.xyz/OHLCV/api/tokens/by-chat/${encodeURIComponent(channel)}`;
+            
             
             let response;
             try {
@@ -907,7 +1078,15 @@ const processData = (rawData, currentTab) => {
         if (connected && publicKey) {
             const fetchWallet = async () => {
                 try {
-                    await getWallet(publicKey.toString());
+                    const result = await getWallet(publicKey.toString());
+                    const tgid = result?.telegramId;
+                    if (tgid) {
+                        const isNumeric = /^\d+$/.test(String(tgid));
+                        const userObj = isNumeric
+                            ? { id: String(tgid), username: '' }
+                            : { id: '', username: String(String(tgid).replace(/^@/, '')) };
+                        setTelegramUser(userObj);
+                    }
                 } catch (error) {
                     console.error('Error fetching wallet:', error);
                 }
@@ -1052,15 +1231,34 @@ const processData = (rawData, currentTab) => {
                         <div className="header-card">
                             <div className="d-flex justify-content-between align-items-center">
                                 <h1 className="dashboard-title">Butter Terminal Dashboard</h1>
-                                <div>
-                                <WebSocketStatus isConnected={isPriceConnected} error={wsError} />
+                                <div className="d-flex flex-column align-items-center flex-grow-1 justify-content-center" style={{ maxWidth: '600px', margin: '0 auto' }}>
+                                    <WebSocketStatus isConnected={isPriceConnected} error={wsError} />
                                     {lastUpdate && (
                                         <div className="last-update">
                                             <p>Price Data Updated: {lastUpdate}</p>
                                         </div>
                                     )}
                                 </div>
-                                <div className='flex justify-center gap-2 items-center'>
+                                <div className="d-flex align-items-center gap-3">
+                                    {butterWalletCredentials && (
+                                        <button
+                                            className='rounded bg-[#EEAB00] text-black p-2.5 hover:opacity-90 transition-colors disabled:opacity-60 disabled:cursor-not-allowed'
+                                            onClick={onConnectTelegram}
+                                            title="Connect Telegram"
+                                            disabled={Boolean(butterWalletCredentials?.telegram_id != null)}
+                                        >
+                                            {(() => {
+                                                const tgid = butterWalletCredentials?.telegram_id;
+                                                if (tgid) {
+                                                    const isNumeric = /^\d+$/.test(String(tgid));
+                                                    return isNumeric ? `ID: ${tgid}` : `@${String(tgid).replace(/^@/, '')}`;
+                                                }
+                                                if (telegramUser?.username) return `@${telegramUser.username}`;
+                                                if (telegramUser?.id) return `ID: ${telegramUser.id}`;
+                                                return 'Connect Telegram';
+                                            })()}
+                                        </button>
+                                    )}
                                     <button
                                         className='rounded bg-slate-600 text-white p-2.5 hover:bg-slate-500 transition-colors'
                                         onClick={() => {
@@ -1074,6 +1272,7 @@ const processData = (rawData, currentTab) => {
                                     >
                                         Account
                                     </button>
+
                                     {!butterWalletCredentials?.publickey ? (
                                         <button
                                             className='rounded bg-slate-600 text-white p-2.5 Create__Butter__Wallet'
@@ -1124,7 +1323,7 @@ const processData = (rawData, currentTab) => {
                     onSelect={handleTabSelect}
                     className="mb-4"
                 >
-                {TAB_CONFIGURATIONS.map(tab => (
+                {[...BASE_TAB_CONFIGURATIONS, ...chatTabs].map(tab => (
                 <Tab eventKey={tab.name} title={tab.name} key={tab.name}>
                     <div className="charts-container">
                         {/* Just pass the chartData directly without filtering by channels */}
